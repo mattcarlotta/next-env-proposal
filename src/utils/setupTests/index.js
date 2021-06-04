@@ -1,4 +1,5 @@
 require("@noshot/env");
+require("jest-enzyme");
 const React = require("react");
 const { JSDOM } = require("jsdom");
 const { configure } = require("enzyme");

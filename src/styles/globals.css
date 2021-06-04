@@ -8,16 +8,28 @@ body {
 
 .app {
   text-align: center;
+  margin: 0 auto;
+  width: 800px;
+  border: 1px dashed #888;
+  border-radius: 5px;
+  padding: 10px 15px 40px 15px;
+  background: #f7f7f7;
 }
 
 .env {
   background: #ebebeb;
   padding: 10px;
   margin: 0 auto;
+  border-radius: 5px;
 }
 
 .error {
   color: red;
+}
+
+.title {
+  margin: 40px 0;
+  text-align: center;
 }
 
 a {

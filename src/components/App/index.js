@@ -3,10 +3,11 @@ import React from "react";
 import app from "../../utils/axiosConfig";
 
 export default function App() {
-  const [{ author, error, quote }, setState] = React.useState({
+  const [{ author, error, isLoading, quote }, setState] = React.useState({
     author: "",
-    quote: "",
     error: "",
+    isLoading: true,
+    quote: "",
   });
 
   React.useEffect(() => {
@@ -17,12 +18,14 @@ export default function App() {
         setState({
           author: res.data.author,
           error: "",
+          isLoading: false,
           quote: res.data.quote,
         });
       } catch (error) {
         setState({
           author: "",
           error: error.toString(),
+          isLoading: false,
           quote: "",
         });
       }
@@ -39,24 +42,29 @@ export default function App() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="app">
-        <h1>Loaded Base Environment:</h1>
+        <h2>Loaded Base Environment</h2>
         <div data-testid="public-url" className="env">
           {process.env.NEXT_PUBLIC_BASEURL}
         </div>
-        <h1>Loaded Specific Environment:</h1>
+        <h2>Loaded Specific Environment</h2>
         <div data-testid="public-env" className="env">
           {process.env.NEXT_PUBLIC_ENV}
         </div>
-        <h2>Environment Specific Quote:</h2>
+        <h3>Environment Specific Quote</h3>
         <div className="env">
-          <span data-testid="quote">{quote}</span> -{" "}
-          <i data-testid="author">{author}</i>
+          {isLoading ? (
+            <span data-testid="loading">Loading...</span>
+          ) : !error ? (
+            <>
+              <span data-testid="quote">{quote}</span> -{" "}
+              <i data-testid="author">{author}</i>
+            </>
+          ) : (
+            <span data-testid="error" className="error">
+              {error}
+            </span>
+          )}
         </div>
-        {error && (
-          <p data-testid="error" className="error">
-            {error}
-          </p>
-        )}
       </main>
     </>
   );
