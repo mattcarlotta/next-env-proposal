@@ -1,34 +1,152 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Custom Env Loading Proposal for NextJS
 
-## Getting Started
+This working concept/proposal is to allow developers to opt-in into loading `.env.*` files by creating an `env.config.json`.
 
-First, run the development server:
+## Quick Links
 
-```bash
-npm run dev
-# or
-yarn dev
+[Why load from a config file?](#why-load-from-a-config-file)
+
+[Installation](#installation)
+
+- [Pros](#pros)
+- [Cons](#cons)
+
+[Commands](#commands)
+
+[Notes](#notes)
+
+## Why load from a config file?
+
+In short, NextJS only allows `.env.*` files to be loaded by `NODE_ENV`. While this allows developers to load environment specfic `.env.*` files, it unfortunately requires `NODE_ENV` to be changed. Ideally, this should be avoided since Next (and 3rd party dependencies) expect `NODE_ENV` to be one of the following: `development`, `production`, and `test`: [source](https://nextjs.org/docs/messages/non-standard-node-env). In summation, if a developer changes `NODE_ENV=development` and uses `next build`, then there's a chance they could ship unoptimized/dead code.
+
+Instead, this proposal avoids changing `NODE_ENV` by loading from an `env.config.json`. Next can hand-off control to the developer who can then decide which `.env.*` files are loaded (reusable), how their loaded (specificity), and when their loaded (by a configurable environment):
+
+**env.config.json**
+
+```json
+{
+  "development": {
+    "debug": true,
+    "paths": [".env.base", ".env.dev"]
+  },
+  "production": {
+    "debug": true,
+    "paths": [".env.base", ".env.prod"]
+  },
+  "staging": {
+    "debug": true,
+    "paths": [".env.base", ".env.stage"]
+  },
+  "testing": {
+    "debug": false,
+    "paths": [".env.base", ".env.test"]
+  }
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+These **environments** can be named anything and they can load/share/mix-and-match `.env.*` files without needing to recreate them per environment:
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+```json
+{
+  "envA": {
+    "debug": true,
+    "paths": [".env.abc123"]
+  },
+  "envB": {
+    "debug": true,
+    "paths": [".env.abc123", ".env.def456"]
+  },
+  "envC": {
+    "debug": true,
+    "paths": [".env.hij789", ".env.def456", ".env.abc123"]
+  }
+}
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+These **environments** can then either be loaded by a flag or by an Env variable:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```json
+{
+  "scripts": {
+    "devconfig": "LOAD_CONFIG=development next dev",
+    "devflag": "next dev -e development"
+  }
+}
+```
 
-## Learn More
+### Pros
 
-To learn more about Next.js, take a look at the following resources:
+✔️ Backwards compatible
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+✔️ The file can be tracked by git since it doesn't contain secrets
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+✔️ Like `next.config.js`, creating an `env.config.json` file would be **opt-in**
 
-## Deploy on Vercel
+✔️ Like `next.config.js`, creating an `env.config.json` file would give developers more control over their environment setup
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+✔️ Keeps `NODE_ENV` to the standard environments: `development`, `production`, and `test` by disallowing `NODE_ENV` overrides with [#19046](https://github.com/vercel/next.js/issues/19046)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+✔️ Adheres to the `NEXT_PUBLIC` env convention
+
+✔️ Unopinionated about `.env.*` naming
+
+✔️ Unopinionated about config environment naming
+
+✔️ Supports loading one or multiple `.env.*` files at once
+
+✔️ Allows reusing `.env.*` files that may not change from environment to environment
+
+### Cons
+
+✔️ Breaks away from the CRA's `.env.*` convention: `.env.{mode}.local`, `.env.local`, `.env.{mode}`, `.env`
+
+✔️ Would require either adding and incorporating a flag: `-e development` and/or adding and incorporating some sort of `LOAD_CONFIG` Env variable
+
+## Installation
+
+1.) Clone repo:
+
+```bash
+git clone git@github.com:mattcarlotta/next-env-proposal.git
+```
+
+2.) Change directory and install deps:
+
+```bash
+# with npm
+cd next-env-proposal && npm install
+
+# or with yarn
+cd next-env-proposal && yarn
+```
+
+3.) Run one of the [commands](#commands) below.
+
+## Commands
+
+Run individual `package.json` scripts by running the following commands (if using `npm`, swap `yarn` for `npm run`):
+
+| `yarn <command>` | Description                                                                                      |
+| ---------------- | ------------------------------------------------------------------------------------------------ |
+| `dev`            | Runs next in the `development` environment and loads `development` config.                       |
+| `stage`          | Builds next in the `production` environment and loads `staging` config.                          |
+| `staging`        | Runs next in the `production` environment and loads `staging` config.                            |
+| `build`          | Builds next in the `production` and loads `production` config.                                   |
+| `start`          | Runs next in the `production` and loads `production` config.                                     |
+| `test`           | Runs tests in the `test` environment and loads `testing` config.                                 |
+| `test:cov`       | Runs tests in the `test` environment and loads `testing` config.                                 |
+| `test:e2e`       | Builds next in the `production` environment with `staging` config and starts cypress test suite. |
+
+## Notes
+
+This demo utilizes [preloading](https://nodejs.org/api/cli.html#cli_r_require_module) to work around Next's current Env implementation.
+
+> -r, --require module#
+> Added in: v1.6.0
+> Preload the specified module at startup.
+>
+> Follows require()'s module resolution rules. module may be either a path to a file, or a node module name.
+>
+> Only CommonJS modules are supported. Attempting to preload a ES6 Module using --require will fail with an error.
+
+However, this proposal would aim to internalalize the Env config initialization within `@next/env` so that preloading isn't required.
