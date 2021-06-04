@@ -149,4 +149,4 @@ This demo utilizes [preloading](https://nodejs.org/api/cli.html#cli_r_require_mo
 >
 > Only CommonJS modules are supported. Attempting to preload a ES6 Module using --require will fail with an error.
 
-However, this proposal would aim to internalalize the Env config initialization within `@next/env` so that preloading isn't required.
+However, this proposal would aim to internalize the Env config initialization within `@next/env` so that preloading isn't required.
