@@ -3,13 +3,31 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "dev": "LOAD_CONFIG=development NODE_OPTIONS='-r @noshot/env' next dev",
+    "stage": "LOAD_CONFIG=stage NODE_OPTIONS='-r @noshot/env' next build",
+    "staging": "LOAD_CONFIG=staging NODE_OPTIONS='-r @noshot/env' next start",
+    "build": "LOAD_CONFIG=production NODE_OPTIONS='-r @noshot/env' next build",
+    "start": "LOAD_CONFIG=production NODE_OPTIONS='-r @noshot/env' next start",
+    "test": "LOAD_CONFIG=testing jest --config ./jest.json",
+    "test:cov": "LOAD_CONFIG=testing jest --config ./jest.json --coverage"
   },
   "dependencies": {
+    "@noshot/env": "^1.0.1",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.1",
+    "axios": "^0.21.1",
+    "enzyme": "^3.11.0",
+    "jsdom": "^16.6.0",
     "next": "10.2.3",
     "react": "17.0.2",
     "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@noshot/utils": "^1.0.1",
+    "axios-mock-adapter": "^1.19.0",
+    "babel-jest": "^27.0.2",
+    "cypress": "^7.4.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^27.0.4"
   }
 }

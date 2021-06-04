@@ -1,0 +1,22 @@
+{
+  "testEnvironment": "jsdom",
+  "clearMocks": true,
+  "moduleDirectories": ["<rootDir>", "node_modules"],
+  "moduleNameMapper": {
+    ".*\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/utils/__mocks__/fileMock.js",
+    "\\.(css|scss)$": "identity-obj-proxy"
+  },
+  "transform": {
+    "^.+\\.js?$": "babel-jest"
+  },
+  "testPathIgnorePatterns": [
+    "<rootDir>/.next",
+    "<rootDir>/e2e",
+    "<rootDir>/node_modules",
+    "<rootDir>/public",
+    "<rootDir>/env.config.json"
+  ],
+  "collectCoverageFrom": ["src/**/*.js"],
+  "coveragePathIgnorePatterns": ["<rootDir>/src/pages"],
+  "setupFilesAfterEnv": ["<rootDir>/src/utils/setupTests/index.js"]
+}

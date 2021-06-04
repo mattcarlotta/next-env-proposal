@@ -6,6 +6,20 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+.app {
+  text-align: center;
+}
+
+.env {
+  background: #ebebeb;
+  padding: 10px;
+  margin: 0 auto;
+}
+
+.error {
+  color: red;
+}
+
 a {
   color: inherit;
   text-decoration: none;
