@@ -19,7 +19,7 @@ This working concept/proposal is to allow developers to opt-in into loading `.en
 
 In short, NextJS only allows `.env.*` files to be loaded by `NODE_ENV`. While this allows developers to load environment specfic `.env.*` files, it unfortunately requires `NODE_ENV` to be changed. Ideally, this should be avoided since Next (and 3rd party dependencies) expect `NODE_ENV` to be one of the following: `development`, `production`, and `test`: [source](https://nextjs.org/docs/messages/non-standard-node-env). In summation, if a developer changes `NODE_ENV=development` and uses `next build`, then there's a chance they could ship unoptimized/dead code.
 
-Instead, this proposal avoids changing `NODE_ENV` by loading from an `env.config.json`. Next can hand-off control to the developer who can then decide which `.env.*` files are loaded (reusable), how their loaded (specificity), and when their loaded (by a configurable environment):
+Instead, this proposal avoids changing `NODE_ENV` by loading from an `env.config.json`. Next can hand-off control to the developer who can then decide which `.env.*` files are loaded (reusable), how they're loaded (specificity), and when their loaded (by a configurable environment):
 
 **env.config.json**
 
