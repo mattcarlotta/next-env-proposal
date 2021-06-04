@@ -6,10 +6,10 @@ This working concept/proposal is to allow developers to opt-in into loading `.en
 
 [Why load from a config file?](#why-load-from-a-config-file)
 
-[Installation](#installation)
-
 - [Pros](#pros)
 - [Cons](#cons)
+
+[Installation](#installation)
 
 [Commands](#commands)
 
