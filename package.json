@@ -13,10 +13,7 @@
   },
   "dependencies": {
     "@noshot/env": "^1.0.1",
-    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.1",
     "axios": "^0.21.1",
-    "enzyme": "^3.11.0",
-    "jsdom": "^16.6.0",
     "next": "10.2.3",
     "react": "17.0.2",
     "react-dom": "17.0.2"
@@ -24,10 +21,13 @@
   "devDependencies": {
     "@babel/core": "^7.14.3",
     "@noshot/utils": "^1.0.1",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.1",
     "axios-mock-adapter": "^1.19.0",
     "babel-jest": "^27.0.2",
     "cypress": "^7.4.0",
+    "enzyme": "^3.11.0",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^27.0.4"
+    "jest": "^27.0.4",
+    "jsdom": "^16.6.0"
   }
 }
