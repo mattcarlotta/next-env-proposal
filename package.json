@@ -13,7 +13,7 @@
     "test:e2e": "npm run stage && concurrently --success first --kill-others \"npm run staging\" \"cypress open --project ./e2e\""
   },
   "dependencies": {
-    "@noshot/env": "^1.0.1",
+    "@noshot/env": "^2.0.0",
     "axios": "^0.21.1",
     "next": "10.2.3",
     "react": "17.0.2",
